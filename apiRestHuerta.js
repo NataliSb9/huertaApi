@@ -9,7 +9,7 @@ app.use(express.urlencoded({extended:false}));
 app.use(express.json());
 app.use(cors());
 
-/*////////////////////////////////////*/ 
+/*////////////////////////////////////*/  
 let mysql = require("mysql")
 let connection = mysql.createConnection(
     {
