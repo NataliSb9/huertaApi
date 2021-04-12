@@ -1,0 +1,25 @@
+{
+  "name": "apis",
+  "version": "1.0.0",
+  "description": "",
+  "main": "apiRestHuerta.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+  "start": "node apiRestHuerta.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NataliSb9/huertoku.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NataliSb9/huertoku/issues"
+  },
+  "homepage": "https://github.com/NataliSb9/huertoku#readme"
+}
