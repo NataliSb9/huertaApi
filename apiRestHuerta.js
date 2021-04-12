@@ -20,17 +20,17 @@ let connection = mysql.createConnection(
     })
 
 /*////////////////////////////////////*/ 
-connection.connect()
-// connection.connect(function (err){
-//     if(err)
-//     {
-//         console.log(err);
-//     }
-//     else
-//     {
-//         console.log("Conexión correcta.")
-//     }
-// });
+// connection.connect()
+connection.connect(function (err){
+    if(err)
+    {
+        console.log(err);
+    }
+    else
+    {
+        console.log("Conexión correcta.")
+    }
+});
 /*////////////////////////////////////*/ 
 
 app.get("/user",
