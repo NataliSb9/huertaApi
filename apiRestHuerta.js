@@ -32,7 +32,6 @@ connection.connect(function (err){
     }
 });
 /*///////////////GET USER/////////////////////*/ 
-
 app.get("/user",
 
 function (request,response) 
@@ -95,9 +94,7 @@ function (request,response)
         }
     })
 });
-
 /*/////////////////PUT USER///////////////////*/
-
 app.put("/user",
 
 function (request,response) 
@@ -109,9 +106,9 @@ function (request,response)
     }
     else
     {
-        let usuario = "UPDATE user SET name = COALESCE(?, name), surname1 = COALESCE (?, surname1), surname2 = COALESCE(?, surname2), birthyear = COALESCE(?, birthyear), username = COALESCE(?, username), localidad = COALESCE(?, localidad), cp = COALESCE(?, cp), email = COALESCE(?, email), password = COALESCE(?, password) WHERE iduser = ?";
+        let user = "UPDATE user SET name = COALESCE(?, name), surname1 = COALESCE (?, surname1), surname2 = COALESCE(?, surname2), birthyear = COALESCE(?, birthyear), username = COALESCE(?, username), localidad = COALESCE(?, localidad), cp = COALESCE(?, cp), email = COALESCE(?, email), password = COALESCE(?, password) WHERE iduser = ?";
     
-    connection.query(usuario, params, function (err, result)
+    connection.query(user, params, function (err, result)
     {
         if (err) 
         {
@@ -124,9 +121,7 @@ function (request,response)
     });
     }
 });
-
 /*/////////////////DELETE USER///////////////////*/
-
 app.delete("/user",
 
 function (request,response) 
@@ -153,9 +148,282 @@ function (request,response)
         })
 });
 
+/*///////////////////////////////////////ENDPOINTS PRODUCTOS//////////////////////////////////////////////////////*/
+/*///////////////GET PRODUCT/////////////////////*/ 
+app.get("/product",
+
+function (request,response) 
+{
+    let params = [request.query.id];
+    console.log(request.query.id);
+    if(request.query.id != null)
+    {
+        let productInfo = "SELECT * FROM product WHERE idproduct = ?";
+        connection.query(productInfo, params, function (err, result) 
+        {
+            if (err) response.send(err)
+            else 
+            {
+                response.send(result)
+            }
+        })
+    }
+    else
+    {
+        let productInfo = "SELECT * FROM product"
+        connection.query(productInfo, function (err,result)
+        {
+            if (err)
+            {
+                response.send(err)
+            }
+            else
+            {
+                response.send(result)
+            }
+        }) 
+    }
+});
+/*///////////////POST PRODUCT/////////////////////*/ 
+app.post ("/product",
+
+function (request,response) 
+{
+    let params = [request.body.productName, request.body.productType, request.body.productAmount, request.body.productLocality, request.body.productPrice, request.body.productEco, request.body.productChange, request.body.iduser]
+    let product = "INSERT INTO product (productName, productType, productAmount, productLocality, productPrice, productEco, productChange, iduser) VALUES (?,?,?,?,?,?,?,?)";
+    connection.query(product, params, function (err, result)
+    {
+        if (err)
+        {
+            if((err.code == "ER_BAD_NULL_ERROR"))
+            {
+                response.send({"mensaje":"No se puede introducir un valor nulo"})
+            }
+            else if (err.code == "ER_NO_REFERNCED_ROW_2")
+            {
+                response.send({"mensaje":"Introduce un grupo válido"})
+            }
+            else {response.send(err)}
+        }
+        else 
+        {
+            let respuesta = {"mensaje":"Producto añadido"}
+            response.send(respuesta)
+        }
+    })
+});
+/*/////////////////PUT PRODUCT///////////////////*/
+app.put("/product",
+
+function (request,response) 
+{
+    let params = [request.body.productName, request.body.productType, request.body.productAmount, request.body.productLocality, request.body.productPrice, request.body.productEco, request.body.productChange, request.body.iduser, request.body.idproduct]
+    if (request.body.iduser == null)
+    {
+        response.send({"mensaje":"Introduce un ID"})
+    }
+    else
+    {
+        let product = "UPDATE product SET productName = COALESCE(?, productName), productType = COALESCE (?, productType), productAmount = COALESCE(?, productAmount), productLocality = COALESCE(?, productLocality), productPrice = COALESCE(?, productPrice), productEco = COALESCE(?, productEco), productChange = COALESCE(?, productChange), iduser = COALESCE(?, iduser) WHERE idproduct = ?";
+    
+    connection.query(product, params, function (err, result)
+    {
+        if (err) 
+        {
+            if (err)
+            {
+                response.send(err)
+            }
+        }
+        else {response.send({"mensaje":"Modificación aplicada"})}
+    });
+    }
+});
+/*/////////////////DELETE USER///////////////////*/
+app.delete("/product",
+
+function (request,response) 
+{
+    let params = [request.query.id]
+    let product = "DELETE FROM product WHERE idproduct = ?";
+    connection.query(product, params, function (err, result)
+    {
+        if (err) 
+        {
+            response.send(err)
+        }
+        
+        else
+        {
+            if(response.affectedRows == 0)
+            {
+                response.send ({"mensaje":"El ID introducido no es válido"})
+            }
+            else 
+            {
+                response.send ({"mensaje":"Producto eliminado"})}
+            }
+        })
+});
+
+/*///////////////////////////////////////ENDPOINTS CHAT//////////////////////////////////////////////////////*/
+/*///////////////GET CHAT/////////////////////*/ 
+app.get("/chat",
+
+function (request,response) 
+{
+    let params = [request.query.id];
+    console.log(request.query.id);
+    if(request.query.id != null)
+    {
+        let chatInfo = "SELECT * FROM chat WHERE idchat = ?";
+        connection.query(chatInfo, params, function (err, result) 
+        {
+            if (err) response.send(err)
+            else 
+            {
+                response.send(result)
+            }
+        })
+    }
+    else
+    {
+        let chatInfo = "SELECT * FROM chat"
+        connection.query(chatInfo, function (err,result)
+        {
+            if (err)
+            {
+                response.send(err)
+            }
+            else
+            {
+                response.send(result)
+            }
+        }) 
+    }
+});
+/*///////////////POST CHAT/////////////////////*/ 
+app.post ("/chat",
+
+function (request,response) 
+{
+    let params = [request.body.idmessenger1, request.body.idmessenger2]
+    let chat = "INSERT INTO chat (idmessenger1, idmessenger2) VALUES (?,?)";
+    connection.query(chat, params, function (err, result)
+    {
+        if (err)
+        {
+            if((err.code == "ER_BAD_NULL_ERROR"))
+            {
+                response.send({"mensaje":"No se puede introducir un valor nulo"})
+            }
+            else if (err.code == "ER_NO_REFERNCED_ROW_2")
+            {
+                response.send({"mensaje":"Introduce un grupo válido"})
+            }
+            else {response.send(err)}
+        }
+        else 
+        {
+            let respuesta = {"mensaje":"Chat añadido"}
+            response.send(respuesta)
+        }
+    })
+});
+/*/////////////////DELETE CHAT///////////////////*/
+app.delete("/chat",
+
+function (request,response) 
+{
+    let params = [request.query.id]
+    let chat = "DELETE FROM chat WHERE idchat = ?";
+    connection.query(chat, params, function (err, result)
+    {
+        if (err) 
+        {
+            response.send(err)
+        }
+        
+        else
+        {
+            if(response.affectedRows == 0)
+            {
+                response.send ({"mensaje":"El ID introducido no es válido"})
+            }
+            else 
+            {
+                response.send ({"mensaje":"Chat eliminado"})}
+            }
+        })
+});
+/*///////////////////////////////////////ENDPOINTS MENSAJE//////////////////////////////////////////////////////*/
+/*///////////////GET MENSAJE/////////////////////*/ 
+app.get("/message",
+
+function (request,response) 
+{
+    let params = [request.query.id];
+    console.log(request.query.id);
+    if(request.query.id != null)
+    {
+        let messageInfo = "SELECT * FROM message WHERE idmessage = ?";
+        connection.query(messageInfo, params, function (err, result) 
+        {
+            if (err) response.send(err)
+            else 
+            {
+                response.send(result)
+            }
+        })
+    }
+    else
+    {
+        let messageInfo = "SELECT * FROM message"
+        connection.query(messageInfo, function (err,result)
+        {
+            if (err)
+            {
+                response.send(err)
+            }
+            else
+            {
+                response.send(result)
+            }
+        }) 
+    }
+});
+/*///////////////POST MENSAJE/////////////////////*/ 
+app.post ("/message",
+
+function (request,response) 
+{
+    let params = [request.body.idchat, request.body.idsender, request.body.idreciever, request.body.messageText]
+    let message = "INSERT INTO message (idchat, idsender, idreciever, messageText) VALUES (?,?,?,?)";
+    connection.query(message, params, function (err, result)
+    {
+        if (err)
+        {
+            if((err.code == "ER_BAD_NULL_ERROR"))
+            {
+                response.send({"mensaje":"No se puede introducir un valor nulo"})
+            }
+            else if (err.code == "ER_NO_REFERNCED_ROW_2")
+            {
+                response.send({"mensaje":"Introduce un grupo válido"})
+            }
+            else {response.send(err)}
+        }
+        else 
+        {
+            let respuesta = {"mensaje":"Mensaje añadido"}
+            response.send(respuesta)
+        }
+    })
+});
 app.use(function(request, response, next){
     respuesta = {codigo: 404, mensaje: "URL no encontrada"}
     response.status(404).send(respuesta)
 })
 
 app.listen(port);
+
