@@ -528,7 +528,9 @@ app.get("/transaction",
 function (request,response) 
 {
     let params = [request.query.id];
-    if(request.query.id != null)
+    let paramsTransactionBuyer=[request.query.id_buyer];
+    let paramsTransactionSeller=[request.query.id_seller];
+    if(request.query.id != null && request.query.id_buyer == null && request.query.id_seller == null)
     {
         let transactionInfo = "SELECT * FROM transaction WHERE idtransaction = ?";
         connection.query(transactionInfo, params, function (err, result) 
@@ -540,7 +542,34 @@ function (request,response)
             }
         })
     }
-    else
+
+    else if(request.query.id_buyer != null && request.query.id == null && request.query.id_seller == null)
+    {
+        let transactionBuyerInfo = "SELECT * FROM transaction WHERE id_buyer = ?";
+        connection.query(transactionBuyerInfo, paramsTransactionBuyer, function (err, result) 
+        {
+            if (err) response.send(err)
+            else 
+            {
+                response.send(result)
+            }
+        })
+    }
+
+    else if(request.query.id_seller != null && request.query.id == null && request.query.id_buyer == null)
+    {
+        let transactionSellerInfo = "SELECT * FROM transaction WHERE id_seller = ?";
+        connection.query(transactionSellerInfo, paramsTransactionSeller, function (err, result) 
+        {
+            if (err) response.send(err)
+            else 
+            {
+                response.send(result)
+            }
+        })
+    }
+
+    else if (request.query.id == null && request.query.id_buyer == null && request.query.id_seller == null)
     {
         let transactionInfo = "SELECT * FROM transaction"
         connection.query(transactionInfo, function (err,result)
