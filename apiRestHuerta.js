@@ -463,7 +463,7 @@ app.get("/message",
 function (request,response) 
 {
     let params = [request.query.id];
-    console.log(request.query.id);
+
     if(request.query.id != null)
     {
         let messageInfo = "SELECT * FROM message WHERE idmessage = ?";
@@ -520,6 +520,72 @@ function (request,response)
         }
     })
 });
+
+/*///////////////////////////////////////ENDPOINTS TRANSACTION//////////////////////////////////////////////////////*/
+/*///////////////GET TRANSACTION/////////////////////*/ 
+app.get("/transaction",
+
+function (request,response) 
+{
+    let params = [request.query.id];
+    if(request.query.id != null)
+    {
+        let transactionInfo = "SELECT * FROM transaction WHERE idtransaction = ?";
+        connection.query(transactionInfo, params, function (err, result) 
+        {
+            if (err) response.send(err)
+            else 
+            {
+                response.send(result)
+            }
+        })
+    }
+    else
+    {
+        let transactionInfo = "SELECT * FROM transaction"
+        connection.query(transactionInfo, function (err,result)
+        {
+            if (err)
+            {
+                response.send(err)
+            }
+            else
+            {
+                response.send(result)
+            }
+        }) 
+    }
+});
+/*///////////////POST TRANSACTION/////////////////////*/ 
+app.post ("/transaction",
+
+function (request,response) 
+{
+    let params = [request.body.id_buyer, request.body.id_seller, request.body.id_product, request.body.transactionAmount]
+    let transaction = "INSERT INTO transaction (id_buyer, id_seller, id_product, transactionAmount) VALUES (?,?,?,?)";
+    connection.query(transaction, params, function (err, result)
+    {
+        if (err)
+        {
+            if((err.code == "ER_BAD_NULL_ERROR"))
+            {
+                response.send({"mensaje":"No se puede introducir un valor nulo"})
+            }
+            else if (err.code == "ER_NO_REFERNCED_ROW_2")
+            {
+                response.send({"mensaje":"Introduce un grupo válido"})
+            }
+            else {response.send(err)}
+        }
+        else 
+        {
+            let respuesta = {"mensaje":"Transacción añadida"}
+            response.send(respuesta)
+        }
+    })
+});
+
+
 app.use(function(request, response, next){
     respuesta = {codigo: 404, mensaje: "URL no encontrada"}
     response.status(404).send(respuesta)
@@ -527,7 +593,7 @@ app.use(function(request, response, next){
 
 app.listen(port);
 
-if ("patatas" && "cebollas" || "kiwis")
-{
-    adsfasdfd="patatas";
-}
+// if ("patatas" && "cebollas" || "kiwis")
+// {
+//     adsfasdfd="patatas";
+// }
