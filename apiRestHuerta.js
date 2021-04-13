@@ -155,8 +155,29 @@ app.get("/product",
 function (request,response) 
 {
     let params = [request.query.id];
-    console.log(request.query.id);
-    if(request.query.id != null)
+    let paramsProductName=[request.query.productName];
+    let paramsProductType=[request.query.productType];
+    let paramsProductAmount=[request.query.productAmount];
+    let paramsProductLocality=[request.query.productLocality];
+    let paramsProductPrice=[request.query.productPrice];
+    let paramsProductEco=[request.query.productEco];
+    let paramsProductChange=[request.query.productChange];
+
+    if(request.query.id == null && request.query.productName != null && request.query.productType == null && request.query.productAmount == null && request.query.productLocality == null && request.query.productPrice == null && request.query.productEco == null && request.query.productChange == null)
+    {
+        let productNamekInfo = "SELECT * FROM product WHERE productName = ?";
+        connection.query(productNamekInfo, paramsProductName, function (err, result) 
+        
+        {
+            if (err) response.send(err)
+            else 
+            {
+                response.send(result)
+            }
+        })
+    }
+
+    else if(request.query.productName == null && request.query.id != null && request.query.productType == null && request.query.productAmount == null && request.query.productLocality == null && request.query.productPrice == null && request.query.productEco == null && request.query.productChange == null)
     {
         let productInfo = "SELECT * FROM product WHERE idproduct = ?";
         connection.query(productInfo, params, function (err, result) 
@@ -168,7 +189,86 @@ function (request,response)
             }
         })
     }
-    else
+
+    else if(request.query.productType != null && request.query.productName == null && request.query.id == null && request.query.productLocality == null && request.query.productAmount == null && request.query.productPrice == null && request.query.productEco == null && request.query.productChange == null)
+    {
+        let productTypeInfo = "SELECT * FROM product WHERE productType = ?";
+        connection.query(productTypeInfo, paramsProductType, function (err, result) 
+        {
+            if (err) response.send(err)
+            else 
+            {
+                response.send(result)
+            }
+        })
+    }
+
+    else if(request.query.productAmount != null && request.query.productName == null && request.query.id == null && request.query.productType == null && request.query.productLocality == null && request.query.productPrice == null && request.query.productEco == null && request.query.productChange == null)
+    {
+        let productAmountInfo = "SELECT * FROM product WHERE productAmount = ?";
+        connection.query(productAmountInfo, paramsProductAmount, function (err, result) 
+        {
+            if (err) response.send(err)
+            else 
+            {
+                response.send(result)
+            }
+        })
+    }
+
+    else if(request.query.productLocality != null && request.query.productName == null && request.query.id == null && request.query.productType == null && request.query.productAmount == null && request.query.productPrice == null && request.query.productEco == null && request.query.productChange == null)
+    {
+        let productLocalityInfo = "SELECT * FROM product WHERE productLocality = ?";
+        connection.query(productLocalityInfo, paramsProductLocality, function (err, result) 
+        {
+            if (err) response.send(err)
+            else 
+            {
+                response.send(result)
+            }
+        })
+    }
+
+    else if(request.query.productPrice != null && request.query.productName == null && request.query.id == null && request.query.productType == null && request.query.productAmount == null && request.query.productLocality == null && request.query.productEco == null && request.query.productChange == null)
+    {
+        let productPriceInfo = "SELECT * FROM product WHERE productPrice = ?";
+        connection.query(productPriceInfo, paramsProductPrice, function (err, result) 
+        {
+            if (err) response.send(err)
+            else 
+            {
+                response.send(result)
+            }
+        })
+    }
+
+    else if(request.query.productEco != null && request.query.productName == null && request.query.id == null && request.query.productType == null && request.query.productAmount == null && request.query.productLocality == null && request.query.productPrice == null && request.query.productChange == null)
+    {
+        let productEcoInfo = "SELECT * FROM product WHERE productEco = ?";
+        connection.query(productEcoInfo, paramsProductEco, function (err, result) 
+        {
+            if (err) response.send(err)
+            else 
+            {
+                response.send(result)
+            }
+        })
+    }
+
+    else if(request.query.productChange != null && request.query.productName == null && request.query.id == null && request.query.productType == null && request.query.productAmount == null && request.query.productLocality == null && request.query.productPrice == null && request.query.productEco == null)
+    {
+        let productChangeInfo = "SELECT * FROM product WHERE productChange = ?";
+        connection.query(productChangeInfo, paramsProductChange, function (err, result) 
+        {
+            if (err) response.send(err)
+            else 
+            {
+                response.send(result)
+            }
+        })
+    }
+
+    else if(request.query.productName == null && request.query.id == null && request.query.productType == null && request.query.productAmount == null && request.query.productLocality == null && request.query.productPrice == null && request.query.productEco == null && request.query.productChange == null)
     {
         let productInfo = "SELECT * FROM product"
         connection.query(productInfo, function (err,result)
@@ -427,3 +527,7 @@ app.use(function(request, response, next){
 
 app.listen(port);
 
+if ("patatas" && "cebollas" || "kiwis")
+{
+    adsfasdfd="patatas";
+}
