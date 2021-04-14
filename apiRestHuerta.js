@@ -20,7 +20,6 @@ let connection = mysql.createConnection(
     })
 
 /*////////////////////////////////////*/ 
-// connection.connect()
 connection.connect(function (err){
     if(err)
     {
@@ -507,8 +506,3 @@ app.use(function(request, response, next){
 })
 
 app.listen(port);
-
-// if ("patatas" && "cebollas" || "kiwis")
-// {
-//     adsfasdfd="patatas";
-// }
