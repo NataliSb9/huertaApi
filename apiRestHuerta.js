@@ -71,7 +71,7 @@ app.post ("/user",
 
 function (request,response) 
 {
-    let params = [request.body.name, request.body.surname1, request.body.surname2, request.body.birthyear, request.body.username, request.body.localidad, request.body.cp, request.body.email, request.body.password]
+    let params = [request.body.name, request.body.surname1, request.body.surname2, request.body.birthyear, request.body.username, request.body.localidad, request.body.cp, request.body.email, request.body.password, request.body.userImg]
     let usuario = "INSERT INTO user (name, surname1, surname2, birthyear, username, localidad, cp, email, password) VALUES (?,?,?,?,?,?,?,?,?)";
     connection.query(usuario, params, function (err, result)
     {
@@ -99,14 +99,14 @@ app.put("/user",
 
 function (request,response) 
 {
-    let params = [request.body.name, request.body.surname1, request.body.surname2, request.body.birthyear, request.body.username, request.body.localidad, request.body.cp, request.body.email, request.body.password, request.body.iduser]
+    let params = [request.body.name, request.body.surname1, request.body.surname2, request.body.birthyear, request.body.username, request.body.localidad, request.body.cp, request.body.email, request.body.password, request.body.iduser, request.body.userImg]
     if (request.body.iduser == null)
     {
         response.send({"mensaje":"Introduce un ID"})
     }
     else
     {
-        let user = "UPDATE user SET name = COALESCE(?, name), surname1 = COALESCE (?, surname1), surname2 = COALESCE(?, surname2), birthyear = COALESCE(?, birthyear), username = COALESCE(?, username), localidad = COALESCE(?, localidad), cp = COALESCE(?, cp), email = COALESCE(?, email), password = COALESCE(?, password) WHERE iduser = ?";
+        let user = "UPDATE user SET name = COALESCE(?, name), surname1 = COALESCE (?, surname1), surname2 = COALESCE(?, surname2), birthyear = COALESCE(?, birthyear), username = COALESCE(?, username), localidad = COALESCE(?, localidad), cp = COALESCE(?, cp), email = COALESCE(?, email), password = COALESCE(?, password), userImg = COALESCE(?, userImg)  WHERE iduser = ?";
     
     connection.query(user, params, function (err, result)
     {
@@ -290,7 +290,7 @@ app.post ("/product",
 function (request,response) 
 {
     let params = [request.body.productName, request.body.productType, request.body.productAmount, request.body.productLocality, request.body.productPrice, request.body.productEco, request.body.productChange, request.body.iduser]
-    let product = "INSERT INTO product (productName, productType, productAmount, productLocality, productPrice, productEco, productChange, iduser) VALUES (?,?,?,?,?,?,?,?)";
+    let product = "INSERT INTO product (productName, productType, productAmount, productLocality, productPrice, productEco, productChange, iduser, productImg) VALUES (?,?,?,?,?,?,?,?,?)";
     connection.query(product, params, function (err, result)
     {
         if (err)
@@ -317,14 +317,14 @@ app.put("/product",
 
 function (request,response) 
 {
-    let params = [request.body.productName, request.body.productType, request.body.productAmount, request.body.productLocality, request.body.productPrice, request.body.productEco, request.body.productChange, request.body.iduser, request.body.idproduct]
+    let params = [request.body.productName, request.body.productType, request.body.productAmount, request.body.productLocality, request.body.productPrice, request.body.productEco, request.body.productChange, request.body.iduser, request.body.productImg, request.body.idproduct]
     if (request.body.iduser == null)
     {
         response.send({"mensaje":"Introduce un ID"})
     }
     else
     {
-        let product = "UPDATE product SET productName = COALESCE(?, productName), productType = COALESCE (?, productType), productAmount = COALESCE(?, productAmount), productLocality = COALESCE(?, productLocality), productPrice = COALESCE(?, productPrice), productEco = COALESCE(?, productEco), productChange = COALESCE(?, productChange), iduser = COALESCE(?, iduser) WHERE idproduct = ?";
+        let product = "UPDATE product SET productName = COALESCE(?, productName), productType = COALESCE (?, productType), productAmount = COALESCE(?, productAmount), productLocality = COALESCE(?, productLocality), productPrice = COALESCE(?, productPrice), productEco = COALESCE(?, productEco), productChange = COALESCE(?, productChange), iduser = COALESCE(?, iduser), productImg = COALESCE(?, productImg) WHERE idproduct = ?";
     
     connection.query(product, params, function (err, result)
     {
