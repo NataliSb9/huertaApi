@@ -35,11 +35,14 @@ app.get("/user",
 
 function (request,response) 
 {
-    let params = [request.query.id];
-    console.log(request.query.id);
-    if(request.query.id != null)
+    let params = [request.query.id, request.query.email, request.query.password];
+    
+    if(request.query.id != null || request.query.email != null || request.query.password != null)
     {
-        let userInfo = "SELECT * FROM user WHERE iduser = ?";
+        let userInfo = "SELECT * FROM user WHERE iduser = COALESCE (?,iduser)"+
+        "AND email = COALESCE (?,email)"+
+        "AND password = COALESCE (?,password)";
+
         connection.query(userInfo, params, function (err, result) 
         {
             if (err) response.send(err)
