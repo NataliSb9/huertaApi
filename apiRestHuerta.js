@@ -31,7 +31,7 @@ connection.connect(function (err){
     }
 });
 /*///////////////GET USER/////////////////////*/ 
-app.post("/user",
+app.post("/login",
 
 function (request,response) 
 {
