@@ -20,7 +20,6 @@ let connection = mysql.createConnection(
     })
 
 /*////////////////////////////////////*/ 
-// connection.connect()
 connection.connect(function (err){
     if(err)
     {
@@ -36,11 +35,14 @@ app.get("/user",
 
 function (request,response) 
 {
-    let params = [request.query.id];
-    console.log(request.query.id);
-    if(request.query.id != null)
+    let params = [request.query.id, request.query.email, request.query.password];
+    
+    if(request.query.id != null || request.query.email != null || request.query.password != null)
     {
-        let userInfo = "SELECT * FROM user WHERE iduser = ?";
+        let userInfo = "SELECT * FROM user WHERE iduser = COALESCE (?,iduser)"+
+        "AND email = COALESCE (?,email)"+
+        "AND password = COALESCE (?,password)";
+
         connection.query(userInfo, params, function (err, result) 
         {
             if (err) response.send(err)
@@ -71,8 +73,8 @@ app.post ("/user",
 
 function (request,response) 
 {
-    let params = [request.body.name, request.body.surname1, request.body.surname2, request.body.birthyear, request.body.username, request.body.localidad, request.body.cp, request.body.email, request.body.password, request.body.userImg]
-    let usuario = "INSERT INTO user (name, surname1, surname2, birthyear, username, localidad, cp, email, password) VALUES (?,?,?,?,?,?,?,?,?)";
+    let params = [request.body.name, request.body.surname1, request.body.surname2, request.body.birthyear, request.body.username, request.body.localidad, request.body.telefono, request.body.email, request.body.password, request.body.userImg]
+    let usuario = "INSERT INTO user (name, surname1, surname2, birthyear, username, localidad, telefono, email, password) VALUES (?,?,?,?,?,?,?,?,?)";
     connection.query(usuario, params, function (err, result)
     {
         if (err)
@@ -99,14 +101,14 @@ app.put("/user",
 
 function (request,response) 
 {
-    let params = [request.body.name, request.body.surname1, request.body.surname2, request.body.birthyear, request.body.username, request.body.localidad, request.body.cp, request.body.email, request.body.password, request.body.iduser, request.body.userImg]
+    let params = [request.body.name, request.body.surname1, request.body.surname2, request.body.birthyear, request.body.username, request.body.localidad, request.body.telefono, request.body.email, request.body.password, request.body.iduser, request.body.userImg]
     if (request.body.iduser == null)
     {
         response.send({"mensaje":"Introduce un ID"})
     }
     else
     {
-        let user = "UPDATE user SET name = COALESCE(?, name), surname1 = COALESCE (?, surname1), surname2 = COALESCE(?, surname2), birthyear = COALESCE(?, birthyear), username = COALESCE(?, username), localidad = COALESCE(?, localidad), cp = COALESCE(?, cp), email = COALESCE(?, email), password = COALESCE(?, password), userImg = COALESCE(?, userImg)  WHERE iduser = ?";
+        let user = "UPDATE user SET name = COALESCE(?, name), surname1 = COALESCE (?, surname1), surname2 = COALESCE(?, surname2), birthyear = COALESCE(?, birthyear), username = COALESCE(?, username), localidad = COALESCE(?, localidad), telefono = COALESCE(?, telefono), email = COALESCE(?, email), password = COALESCE(?, password), userImg = COALESCE(?, userImg)  WHERE iduser = ?";
     
     connection.query(user, params, function (err, result)
     {
@@ -437,39 +439,15 @@ app.get("/transaction",
 
 function (request,response) 
 {
-    let params = [request.query.id];
-    let paramsTransactionBuyer=[request.query.id_buyer];
-    let paramsTransactionSeller=[request.query.id_seller];
-    if(request.query.id != null && request.query.id_buyer == null && request.query.id_seller == null)
+    let params = [request.query.id, request.query.id_buyer, request.query.id_seller];
+
+    if(request.query.id != null || request.query.id_buyer != null || request.query.id_seller != null)
     {
-        let transactionInfo = "SELECT * FROM transaction WHERE idtransaction = ?";
+        let transactionInfo = "SELECT * FROM transaction WHERE idtransaction = COALESCE(? , idtransaction) "+
+        " AND id_buyer = COALESCE(? , id_buyer) "+
+        " AND id_seller = COALESCE(? , id_seller)";
+
         connection.query(transactionInfo, params, function (err, result) 
-        {
-            if (err) response.send(err)
-            else 
-            {
-                response.send(result)
-            }
-        })
-    }
-
-    else if(request.query.id_buyer != null && request.query.id == null && request.query.id_seller == null)
-    {
-        let transactionBuyerInfo = "SELECT * FROM transaction WHERE id_buyer = ?";
-        connection.query(transactionBuyerInfo, paramsTransactionBuyer, function (err, result) 
-        {
-            if (err) response.send(err)
-            else 
-            {
-                response.send(result)
-            }
-        })
-    }
-
-    else if(request.query.id_seller != null && request.query.id == null && request.query.id_buyer == null)
-    {
-        let transactionSellerInfo = "SELECT * FROM transaction WHERE id_seller = ?";
-        connection.query(transactionSellerInfo, paramsTransactionSeller, function (err, result) 
         {
             if (err) response.send(err)
             else 
@@ -531,8 +509,3 @@ app.use(function(request, response, next){
 })
 
 app.listen(port);
-
-// if ("patatas" && "cebollas" || "kiwis")
-// {
-//     adsfasdfd="patatas";
-// }
