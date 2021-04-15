@@ -31,17 +31,15 @@ connection.connect(function (err){
     }
 });
 /*///////////////GET USER/////////////////////*/ 
-app.get("/user",
+app.post("/user",
 
 function (request,response) 
 {
-    let params = [request.query.id, request.query.email, request.query.password];
+    let params = [request.body.email, request.body.password];
     
-    if(request.query.id != null || request.query.email != null || request.query.password != null)
+    if(request.body.email != null || request.body.password != null)
     {
-        let userInfo = "SELECT * FROM user WHERE iduser = COALESCE (?,iduser)"+
-        "AND email = COALESCE (?,email)"+
-        "AND password = COALESCE (?,password)";
+        let userInfo = "SELECT * FROM user WHERE email = ? AND password = ?";
 
         connection.query(userInfo, params, function (err, result) 
         {
@@ -52,21 +50,21 @@ function (request,response)
             }
         })
     }
-    else
-    {
-        let userInfo = "SELECT * FROM user"
-        connection.query(userInfo, function (err,result)
-        {
-            if (err)
-            {
-                response.send(err)
-            }
-            else
-            {
-                response.send(result)
-            }
-        }) 
-    }
+    // else
+    // {
+    //     let userInfo = "SELECT * FROM user"
+    //     connection.query(userInfo, function (err,result)
+    //     {
+    //         if (err)
+    //         {
+    //             response.send(err)
+    //         }
+    //         else
+    //         {
+    //             response.send(result)
+    //         }
+    //     }) 
+    // }
 });
 /*/////////////////POST USER///////////////////*/
 app.post ("/user",
