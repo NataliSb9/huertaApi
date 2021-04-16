@@ -531,6 +531,7 @@ function (request,response)
 
 app.get("/pedidos", function(request, response){
 
+
     let params = [request.query.id]
 
     let pedidos = `SELECT id_product, id_seller, user.name, productName, productType,productAmount,productLocality,
@@ -542,11 +543,33 @@ app.get("/pedidos", function(request, response){
     WHERE transaction.id_buyer = COALESCE(?,transaction.id_buyer)`
 
         connection.query(pedidos,params,function(err,res){
-
+            
             response.send(res)
+            console.log(res)
         })     
-    
+  
 })
+
+/*///////////////////////////////////////ENDPOINTS ENVIOS / PEDIDOS ACTIVOS//////////////////////////////////////////////////////*/
+/*///////////////GET PEDIDOS ACTIVOS/////////////////////*/ 
+
+app.get("/p_Activos", function(request,response){
+
+    let params = [request.query.id]
+
+    let p_activos = ` SELECT productName, productLocality, idtransaction FROM product
+
+    INNER JOIN transaction ON (transaction.id_product = product.idproduct)
+    
+    WHERE transaction.id_buyer = ?`
+
+    connection.query(p_activos,params,function(err,res){
+        
+        response.send(res)
+        console.log(res)
+    })
+})
+
 
 
 app.use(function(request, response, next){
