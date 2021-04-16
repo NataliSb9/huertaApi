@@ -464,8 +464,10 @@ function (request,response)
 
     if(request.query.id != null || request.query.id_buyer != null || request.query.id_seller != null)
     {
+
+        
         let transactionInfo = "SELECT * FROM transaction WHERE idtransaction = COALESCE(? , idtransaction) "+
-        " AND id_buyer = COALESCE(? , id_buyer) "+
+        " AND id_buyer = COALESCE(? , id_buyer) " +
         " AND id_seller = COALESCE(? , id_seller)";
 
         connection.query(transactionInfo, params, function (err, result) 
@@ -524,9 +526,34 @@ function (request,response)
 });
 
 
+/*///////////////////////////////////////ENDPOINTS HISTORIAL PEDIDOS//////////////////////////////////////////////////////*/
+/*///////////////GET PEDIDOS/////////////////////*/ 
+
+app.get("/pedidos", function(request, response){
+
+    let params = [request.query.id]
+
+    let pedidos = `SELECT id_product, id_seller, user.name, productName, productType,productAmount,productLocality,
+    productPrice,productEco,productChange,productImg FROM product
+    
+    INNER JOIN transaction ON (transaction.id_product = product.idproduct)
+    INNER JOIN user ON (user.iduser = transaction.id_seller)
+    
+    WHERE transaction.id_buyer = COALESCE(?,transaction.id_buyer)`
+
+        connection.query(pedidos,params,function(err,res){
+
+            response.send(res)
+        })     
+    
+})
+
+
 app.use(function(request, response, next){
     respuesta = {codigo: 404, mensaje: "URL no encontrada"}
     response.status(404).send(respuesta)
 })
+
+
 
 app.listen(port);
