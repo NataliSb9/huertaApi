@@ -179,9 +179,9 @@ function (request,response)
 {
     let params = [request.query.id, request.query.productName, request.query.productType, request.query.productAmount, request.query.productLocality, request.query.productPrice, request.query.productEco, request.query.productChange, request.query.iduser];
 
-        if(request.query.id != null || request.query.productName != null || request.query.productType != null || request.query.productAmount != null || request.query.productLocality != null || request.query.productPrice != null || request.query.productEco != null || request.query.productChange != null)
+        if(request.query.id != null || request.query.productName != null || request.query.productType != null || request.query.productAmount != null || request.query.productLocality != null || request.query.productPrice != null || request.query.productEco != null || request.query.productChange != null || request.query.iduser != null)
     {
-        let productNamekInfo = "SELECT * FROM product WHERE idproduct = COALESCE(?, idproduct)"+
+        let productQuery = "SELECT * FROM product WHERE idproduct = COALESCE(?, idproduct)"+
         " AND productName = COALESCE(?, productName) "+
         " AND productType = COALESCE (?, productType) "+
         " AND productAmount = COALESCE(?, productAmount)"+
@@ -190,7 +190,7 @@ function (request,response)
         " AND productEco = COALESCE(?, productEco)"+
         " AND productChange = COALESCE(?, productChange)"+
         " AND iduser = COALESCE(?, iduser)";
-        connection.query(productNamekInfo,params, function (err, result) 
+        connection.query(productQuery,params, function (err, result) 
         
         {
             if (err) response.send(err)
