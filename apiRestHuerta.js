@@ -31,6 +31,43 @@ connection.connect(function (err){
     }
 });
 /*///////////////GET USER/////////////////////*/ 
+app.get("/user",
+
+function (request,response) 
+{
+    let params = [request.query.id];
+    
+    if(request.query.id)
+    {
+        let userInfo = "SELECT * FROM user WHERE iduser = ?";
+
+        connection.query(userInfo, params, function (err, result) 
+        {
+            if (err) response.send(err)
+            else 
+            {
+                response.send(result)
+            }
+        })
+    }
+    else
+    {
+        let userInfo = "SELECT * FROM user"
+        connection.query(userInfo, function (err,result)
+        {
+            if (err)
+            {
+                response.send(err)
+            }
+            else
+            {
+                response.send(result)
+            }
+        }) 
+    }
+});
+
+
 app.post("/login",
 
 function (request,response) 
@@ -50,21 +87,7 @@ function (request,response)
             }
         })
     }
-    // else
-    // {
-    //     let userInfo = "SELECT * FROM user"
-    //     connection.query(userInfo, function (err,result)
-    //     {
-    //         if (err)
-    //         {
-    //             response.send(err)
-    //         }
-    //         else
-    //         {
-    //             response.send(result)
-    //         }
-    //     }) 
-    // }
+ 
 });
 /*/////////////////POST USER///////////////////*/
 app.post ("/user",
@@ -99,7 +122,7 @@ app.put("/user",
 
 function (request,response) 
 {
-    let params = [request.body.name, request.body.surname1, request.body.surname2, request.body.birthyear, request.body.username, request.body.localidad, request.body.telefono, request.body.email, request.body.password, request.body.iduser, request.body.userImg]
+    let params = [request.body.name, request.body.surname1, request.body.surname2, request.body.birthyear, request.body.username, request.body.localidad, request.body.telefono, request.body.email, request.body.password, request.body.userImg, request.body.iduser]
     if (request.body.iduser == null)
     {
         response.send({"mensaje":"Introduce un ID"})
