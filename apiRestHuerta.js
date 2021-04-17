@@ -557,9 +557,11 @@ app.get("/envios", function(request,response){
 
     let params = [request.query.id]
 
-    let envios = `SELECT productName, productLocality, idtransaction FROM product
-
+    let envios = `SELECT id_product, id_seller, user.name, productName, productType,productAmount,productLocality,
+    productPrice,productEco,productChange,productImg FROM product
+    
     INNER JOIN transaction ON (transaction.id_product = product.idproduct)
+    INNER JOIN user ON (user.iduser = transaction.id_seller)
     
     WHERE transaction.id_seller = ?`
 
