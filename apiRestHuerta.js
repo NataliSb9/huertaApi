@@ -550,20 +550,20 @@ app.get("/pedidos", function(request, response){
   
 })
 
-/*///////////////////////////////////////ENDPOINTS ENVIOS / PEDIDOS ACTIVOS//////////////////////////////////////////////////////*/
+/*///////////////////////////////////////ENDPOINTS HISTORIAL ENVIOS//////////////////////////////////////////////////////*/
 /*///////////////GET PEDIDOS ACTIVOS/////////////////////*/ 
 
-app.get("/p_Activos", function(request,response){
+app.get("/envios", function(request,response){
 
     let params = [request.query.id]
 
-    let p_activos = ` SELECT productName, productLocality, idtransaction FROM product
+    let envios = `SELECT productName, productLocality, idtransaction FROM product
 
     INNER JOIN transaction ON (transaction.id_product = product.idproduct)
     
-    WHERE transaction.id_buyer = ?`
+    WHERE transaction.id_seller = ?`
 
-    connection.query(p_activos,params,function(err,res){
+    connection.query(envios,params,function(err,res){
         
         response.send(res)
         console.log(res)
