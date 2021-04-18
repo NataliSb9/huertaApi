@@ -527,7 +527,7 @@ function (request,response)
 
 
 /*///////////////////////////////////////ENDPOINTS HISTORIAL PEDIDOS//////////////////////////////////////////////////////*/
-/*///////////////GET PEDIDOS/////////////////////*/ 
+/*///////////////GET  HISTORIAL PEDIDOS/////////////////////*/ 
 
 app.get("/pedidos", function(request, response){
 
@@ -544,6 +544,13 @@ app.get("/pedidos", function(request, response){
 
         connection.query(pedidos,params,function(err,res){
             
+            if ( err ){
+                if ( request.query.id == null){
+
+                    response.send({"mensaje":"usuario no logueado"})
+
+                } 
+            } else
             response.send(res)
             console.log(res)
         })     
@@ -551,7 +558,7 @@ app.get("/pedidos", function(request, response){
 })
 
 /*///////////////////////////////////////ENDPOINTS HISTORIAL ENVIOS//////////////////////////////////////////////////////*/
-/*///////////////GET PEDIDOS ACTIVOS/////////////////////*/ 
+/*///////////////GET HISTORIAL PEDIDOS/////////////////////*/ 
 
 app.get("/envios", function(request,response){
 
