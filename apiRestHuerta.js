@@ -177,7 +177,11 @@ app.get("/product",
 
 function (request,response) 
 {
-    let params = [request.query.id, request.query.productName, request.query.productType, request.query.productAmount, request.query.productLocality, request.query.productPrice, request.query.productEco, request.query.productChange, request.query.iduser];
+    let params = [request.query.id, request.query.productName, 
+        request.query.productType, request.query.productAmount, 
+        request.query.productLocality, request.query.productPrice, 
+        request.query.productEco, request.query.productChange, 
+        request.query.iduser];
 
         if(request.query.id != null || request.query.productName != null || request.query.productType != null || request.query.productAmount != null || request.query.productLocality != null || request.query.productPrice != null || request.query.productEco != null || request.query.productChange != null || request.query.iduser != null)
     {
@@ -250,28 +254,42 @@ app.put("/product",
 
 function (request,response) 
 {
-    let params = [request.body.productName, request.body.productType, request.body.productAmount, request.body.productLocality, request.body.productPrice, request.body.productEco, request.body.productChange, request.body.iduser, request.body.productImg, request.body.idproduct]
-    if (request.body.iduser == null)
+    let params = [request.body.productName, request.body.productType, 
+        request.body.productAmount, request.body.productLocality, 
+        request.body.productPrice, request.body.productEco, 
+        request.body.productChange, request.body.productImg, 
+        request.body.iduser, request.body.idproduct]
+
+    if (request.body.idproduct != null)
     {
-        response.send({"mensaje":"Introduce un ID"})
+        console.log("entroooo")
+
+        let product = `UPDATE product SET productName = COALESCE(?, productName), 
+        productType = COALESCE (?, productType), 
+        productAmount = COALESCE(?, productAmount), 
+        productLocality = COALESCE(?, productLocality), 
+        productPrice = COALESCE(?, productPrice), 
+        productEco = COALESCE(?, productEco), 
+        productChange = COALESCE(?, productChange), 
+        productImg = COALESCE(?, productImg),
+        iduser = COALESCE(?, iduser)
+        
+        WHERE idproduct = ?`;
+
+        connection.query(product,params, function(err,res){
+
+        response.send(res)
+
+        })
     }
     else
     {
-        let product = "UPDATE product SET productName = COALESCE(?, productName), productType = COALESCE (?, productType), productAmount = COALESCE(?, productAmount), productLocality = COALESCE(?, productLocality), productPrice = COALESCE(?, productPrice), productEco = COALESCE(?, productEco), productChange = COALESCE(?, productChange), iduser = COALESCE(?, iduser), productImg = COALESCE(?, productImg) WHERE idproduct = ?";
-    
-    connection.query(product, params, function (err, result)
-    {
-        if (err) 
-        {
-            if (err)
-            {
-                response.send(err)
-            }
-        }
-        else {response.send({"mensaje":"Modificación aplicada"})}
-    });
+        response.send({"mensaje":"Introduce un ID"})
+   
     }
 });
+
+
 /*/////////////////DELETE USER///////////////////*/
 app.delete("/product",
 
