@@ -94,8 +94,8 @@ app.post ("/user",
 
 function (request,response) 
 {
-    let params = [request.body.name, request.body.surname1, request.body.surname2, request.body.birthyear, request.body.username, request.body.localidad, request.body.telefono, request.body.email, request.body.password, request.body.userImg]
-    let usuario = "INSERT INTO user (name, surname1, surname2, birthyear, username, localidad, telefono, email, password) VALUES (?,?,?,?,?,?,?,?,?)";
+    let params = [request.body.name, request.body.surname1, request.body.birthyear, request.body.username, request.body.localidad, request.body.telefono, request.body.email, request.body.password, request.body.userImg]
+    let usuario = "INSERT INTO user (name, surname1, birthyear, username, localidad, telefono, email, password) VALUES (?,?,?,?,?,?,?,?,?)";
     connection.query(usuario, params, function (err, result)
     {
         if (err)
@@ -122,14 +122,14 @@ app.put("/user",
 
 function (request,response) 
 {
-    let params = [request.body.name, request.body.surname1, request.body.surname2, request.body.birthyear, request.body.username, request.body.localidad, request.body.telefono, request.body.email, request.body.password, request.body.userImg, request.body.iduser]
+    let params = [request.body.name, request.body.surname1, request.body.birthyear, request.body.username, request.body.localidad, request.body.telefono, request.body.email, request.body.password, request.body.userImg, request.body.iduser]
     if (request.body.iduser == null)
     {
         response.send({"mensaje":"Introduce un ID"})
     }
     else
     {
-        let user = "UPDATE user SET name = COALESCE(?, name), surname1 = COALESCE (?, surname1), surname2 = COALESCE(?, surname2), birthyear = COALESCE(?, birthyear), username = COALESCE(?, username), localidad = COALESCE(?, localidad), telefono = COALESCE(?, telefono), email = COALESCE(?, email), password = COALESCE(?, password), userImg = COALESCE(?, userImg)  WHERE iduser = ?";
+        let user = "UPDATE user SET name = COALESCE(?, name), surname1 = COALESCE (?, surname1), birthyear = COALESCE(?, birthyear), username = COALESCE(?, username), localidad = COALESCE(?, localidad), telefono = COALESCE(?, telefono), email = COALESCE(?, email), password = COALESCE(?, password), userImg = COALESCE(?, userImg)  WHERE iduser = ?";
     
     connection.query(user, params, function (err, result)
     {
@@ -179,8 +179,11 @@ app.get("/product",
 
 function (request,response) 
 {
-    let params = [request.query.id, request.query.productName, request.query.productType, request.query.productAmount, request.query.productLocality, request.query.productPrice, request.query.productEco, request.query.productChange, request.query.iduser];
-    console.log(params)
+    let params = [request.query.id, request.query.productName, 
+        request.query.productType, request.query.productAmount, 
+        request.query.productLocality, request.query.productPrice, 
+        request.query.productEco, request.query.productChange, 
+        request.query.iduser];
 
         if(request.query.id != null || request.query.productName != null || request.query.productType != null || request.query.productAmount != null || request.query.productLocality != null || request.query.productPrice != null || request.query.productEco != null || request.query.productChange != null || request.query.iduser != null)
     {
@@ -248,33 +251,46 @@ function (request,response)
         }
     })
 });
-/*/////////////////PUT PRODUCT///////////////////*/
-app.put("/product",
+/*/////////////////PUT PRODUCT///////////////////*/app.put("/product",
 
 function (request,response) 
 {
-    let params = [request.body.productName, request.body.productType, request.body.productAmount, request.body.productLocality, request.body.productPrice, request.body.productEco, request.body.productChange, request.body.iduser, request.body.productImg, request.body.idproduct, request.body.productDescription]
-    if (request.body.iduser == null)
+    let params = [request.body.productName, request.body.productType, 
+        request.body.productAmount, request.body.productLocality, 
+        request.body.productPrice, request.body.productEco, 
+        request.body.productChange, request.body.productImg, 
+        request.body.iduser, request.body.idproduct]
+
+    if (request.body.idproduct != null)
     {
-        response.send({"mensaje":"Introduce un ID"})
+        console.log("entroooo")
+
+        let product = `UPDATE product SET productName = COALESCE(?, productName), 
+        productType = COALESCE (?, productType), 
+        productAmount = COALESCE(?, productAmount), 
+        productLocality = COALESCE(?, productLocality), 
+        productPrice = COALESCE(?, productPrice), 
+        productEco = COALESCE(?, productEco), 
+        productChange = COALESCE(?, productChange), 
+        productImg = COALESCE(?, productImg),
+        iduser = COALESCE(?, iduser)
+        
+        WHERE idproduct = ?`;
+
+        connection.query(product,params, function(err,res){
+
+        response.send(res)
+
+        })
     }
     else
     {
-        let product = "UPDATE product SET productName = COALESCE(?, productName), productType = COALESCE (?, productType), productAmount = COALESCE(?, productAmount), productLocality = COALESCE(?, productLocality), productPrice = COALESCE(?, productPrice), productEco = COALESCE(?, productEco), productChange = COALESCE(?, productChange), iduser = COALESCE(?, iduser), productImg = COALESCE(?, productImg), productDescription = COALESCE (?, productDescription) WHERE idproduct = ?";
-    
-    connection.query(product, params, function (err, result)
-    {
-        if (err) 
-        {
-            if (err)
-            {
-                response.send(err)
-            }
-        }
-        else {response.send({"mensaje":"Modificación aplicada"})}
-    });
+        response.send({"mensaje":"Introduce un ID"})
+   
     }
 });
+
+
 /*/////////////////DELETE USER///////////////////*/
 
 app.delete("/product", function (request,response){
@@ -530,9 +546,10 @@ function (request,response)
 
 
 /*///////////////////////////////////////ENDPOINTS HISTORIAL PEDIDOS//////////////////////////////////////////////////////*/
-/*///////////////GET PEDIDOS/////////////////////*/ 
+/*///////////////GET  HISTORIAL PEDIDOS/////////////////////*/ 
 
 app.get("/pedidos", function(request, response){
+
 
     let params = [request.query.id]
 
@@ -545,11 +562,42 @@ app.get("/pedidos", function(request, response){
     WHERE transaction.id_buyer = COALESCE(?,transaction.id_buyer)`
 
         connection.query(pedidos,params,function(err,res){
+            
+            if ( err ){
+                if ( request.query.id == null){
 
+                    response.send({"mensaje":"usuario no logueado"})
+
+                } 
+            } else
             response.send(res)
+            console.log(res)
         })     
-    
+  
 })
+
+/*///////////////////////////////////////ENDPOINTS HISTORIAL ENVIOS//////////////////////////////////////////////////////*/
+/*///////////////GET HISTORIAL PEDIDOS/////////////////////*/ 
+
+app.get("/envios", function(request,response){
+
+    let params = [request.query.id]
+
+    let envios = `SELECT id_product, id_seller, user.name, productName, productType,productAmount,productLocality,
+    productPrice,productEco,productChange,productImg FROM product
+    
+    INNER JOIN transaction ON (transaction.id_product = product.idproduct)
+    INNER JOIN user ON (user.iduser = transaction.id_seller)
+    
+    WHERE transaction.id_seller = ?`
+
+    connection.query(envios,params,function(err,res){
+        
+        response.send(res)
+        console.log(res)
+    })
+})
+
 
 
 app.use(function(request, response, next){
