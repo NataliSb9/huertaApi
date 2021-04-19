@@ -251,7 +251,9 @@ function (request,response)
         }
     })
 });
-/*/////////////////PUT PRODUCT///////////////////*/app.put("/product",
+/*/////////////////PUT PRODUCT///////////////////*/
+
+app.put("/product",
 
 function (request,response) 
 {
