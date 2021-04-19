@@ -94,8 +94,8 @@ app.post ("/user",
 
 function (request,response) 
 {
-    let params = [request.body.name, request.body.surname1, request.body.surname2, request.body.birthyear, request.body.username, request.body.localidad, request.body.telefono, request.body.email, request.body.password, request.body.userImg]
-    let usuario = "INSERT INTO user (name, surname1, surname2, birthyear, username, localidad, telefono, email, password) VALUES (?,?,?,?,?,?,?,?,?)";
+    let params = [request.body.name, request.body.surname1, request.body.birthyear, request.body.username, request.body.localidad, request.body.telefono, request.body.email, request.body.password, request.body.userImg]
+    let usuario = "INSERT INTO user (name, surname1, birthyear, username, localidad, telefono, email, password) VALUES (?,?,?,?,?,?,?,?,?)";
     connection.query(usuario, params, function (err, result)
     {
         if (err)
@@ -122,14 +122,14 @@ app.put("/user",
 
 function (request,response) 
 {
-    let params = [request.body.name, request.body.surname1, request.body.surname2, request.body.birthyear, request.body.username, request.body.localidad, request.body.telefono, request.body.email, request.body.password, request.body.userImg, request.body.iduser]
+    let params = [request.body.name, request.body.surname1, request.body.birthyear, request.body.username, request.body.localidad, request.body.telefono, request.body.email, request.body.password, request.body.userImg, request.body.iduser]
     if (request.body.iduser == null)
     {
         response.send({"mensaje":"Introduce un ID"})
     }
     else
     {
-        let user = "UPDATE user SET name = COALESCE(?, name), surname1 = COALESCE (?, surname1), surname2 = COALESCE(?, surname2), birthyear = COALESCE(?, birthyear), username = COALESCE(?, username), localidad = COALESCE(?, localidad), telefono = COALESCE(?, telefono), email = COALESCE(?, email), password = COALESCE(?, password), userImg = COALESCE(?, userImg)  WHERE iduser = ?";
+        let user = "UPDATE user SET name = COALESCE(?, name), surname1 = COALESCE (?, surname1), birthyear = COALESCE(?, birthyear), username = COALESCE(?, username), localidad = COALESCE(?, localidad), telefono = COALESCE(?, telefono), email = COALESCE(?, email), password = COALESCE(?, password), userImg = COALESCE(?, userImg)  WHERE iduser = ?";
     
     connection.query(user, params, function (err, result)
     {
