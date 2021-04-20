@@ -330,7 +330,12 @@ function (request,response)
     
     if(request.query.id1 != null || request.query.id2!=null)
     {
-        let chatInfo = "SELECT DISTINCT * FROM chat WHERE idmessenger1 = ? OR idmessenger2 = ?";
+        let chatInfo = `SELECT chat.idmessenger1, chat.idmessenger2, chat.idchat, user.name, user.userImg  FROM chat 
+
+        INNER JOIN user ON (user.iduser = chat.idmessenger2)
+        
+        WHERE idmessenger1 = ? OR idmessenger2 = ?;`
+
         connection.query(chatInfo, params, function (err, result) 
         {
             if (err) response.send(err)
