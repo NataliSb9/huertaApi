@@ -196,9 +196,9 @@ function (request,response)
         " AND productEco = COALESCE(?, productEco)"+
         " AND productChange = COALESCE(?, productChange)"+
         " AND iduser = COALESCE(?, iduser)";
-        connection.query(productQuery,params, function (err, result) 
-        
-        {
+        console.log(productQuery)
+        console.log("parametros"+params)
+        connection.query(productQuery,params, function (err, result){
             if (err) response.send(err)
             else 
             {
