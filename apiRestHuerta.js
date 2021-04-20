@@ -353,7 +353,7 @@ function (request,response)
             {
                 response.send(result)
             }
-        }) 
+        })  
     }
 });
 /*///////////////POST CHAT/////////////////////*/ 
@@ -420,7 +420,7 @@ function (request,response)
 
     if(request.query.id != null)
     {
-        let messageInfo = "SELECT * FROM message WHERE idmessage = ?";
+        let messageInfo = "SELECT messageText FROM message WHERE idchat = ?";
         connection.query(messageInfo, params, function (err, result) 
         {
             if (err) response.send(err)
