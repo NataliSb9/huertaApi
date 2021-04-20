@@ -326,11 +326,11 @@ app.get("/chat",
 
 function (request,response) 
 {
-    let params = [request.query.id];
-    console.log(request.query.id);
-    if(request.query.id != null)
+    let params = [request.query.id1 , request.query.id2];
+    
+    if(request.query.id1 != null || request.query.id2!=null)
     {
-        let chatInfo = "SELECT * FROM chat WHERE idchat = ?";
+        let chatInfo = "SELECT * FROM chat WHERE idmessenger1 = ? OR idmessenger2 = ?";
         connection.query(chatInfo, params, function (err, result) 
         {
             if (err) response.send(err)
