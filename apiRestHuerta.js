@@ -326,11 +326,16 @@ app.get("/chat",
 
 function (request,response) 
 {
-    let params = [request.query.id];
-    console.log(request.query.id);
-    if(request.query.id != null)
+    let params = [request.query.id1 , request.query.id2];
+    
+    if(request.query.id1 != null || request.query.id2!=null)
     {
-        let chatInfo = "SELECT * FROM chat WHERE idchat = ?";
+        let chatInfo = `SELECT chat.idmessenger1, chat.idmessenger2, chat.idchat, user.name, user.userImg  FROM chat 
+
+        INNER JOIN user ON (user.iduser = chat.idmessenger2)
+        
+        WHERE idmessenger1 = ? OR idmessenger2 = ?;`
+
         connection.query(chatInfo, params, function (err, result) 
         {
             if (err) response.send(err)
@@ -353,7 +358,7 @@ function (request,response)
             {
                 response.send(result)
             }
-        }) 
+        })  
     }
 });
 /*///////////////POST CHAT/////////////////////*/ 
@@ -420,7 +425,7 @@ function (request,response)
 
     if(request.query.id != null)
     {
-        let messageInfo = "SELECT * FROM message WHERE idmessage = ?";
+        let messageInfo = "SELECT messageText FROM message WHERE idchat = ?";
         connection.query(messageInfo, params, function (err, result) 
         {
             if (err) response.send(err)
