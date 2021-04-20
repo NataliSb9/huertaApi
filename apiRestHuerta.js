@@ -95,7 +95,7 @@ app.post ("/user",
 function (request,response) 
 {
     let params = [request.body.name, request.body.surname1, request.body.birthyear, request.body.username, request.body.localidad, request.body.telefono, request.body.email, request.body.password, request.body.userImg]
-    let usuario = "INSERT INTO user (name, surname1, birthyear, username, localidad, telefono, email, password) VALUES (?,?,?,?,?,?,?,?,?)";
+    let usuario = "INSERT INTO user (name, surname1, birthyear, username, localidad, telefono, email, password) VALUES (?,?,?,?,?,?,?,?)";
     connection.query(usuario, params, function (err, result)
     {
         if (err)
