@@ -330,11 +330,13 @@ function (request,response)
     
     if(request.query.id1 != null || request.query.id2!=null)
     {
-        let chatInfo = `SELECT chat.idmessenger1, chat.idmessenger2, chat.idchat, user.name, user.userImg  FROM chat 
+        // let chatInfo = `SELECT chat.idmessenger1, chat.idmessenger2, chat.idchat, user.name, user.userImg  FROM chat 
 
-        INNER JOIN user ON (user.iduser = chat.idmessenger2)
+        // INNER JOIN user ON (user.iduser = chat.idmessenger2)
         
-        WHERE idmessenger1 = ? OR idmessenger2 = ?;`
+        // WHERE idmessenger1 = ? OR idmessenger2 = ?;`
+
+        let chatInfo =  'SELECT * FROM chat WHERE idmessenger1=? OR idmessenger2=?'
 
         connection.query(chatInfo, params, function (err, result) 
         {
@@ -366,8 +368,8 @@ app.post ("/chat",
 
 function (request,response) 
 {
-    let params = [request.body.idmessenger1, request.body.idmessenger2]
-    let chat = "INSERT INTO chat (idmessenger1, idmessenger2) VALUES (?,?)";
+    let params = [request.body.idmessenger1, request.body.idmessenger2,request.body.nameMessenger1,request.body.nameMessenger2,request.body.imgMessenger1,request.body.imgMessenger2]
+    let chat = "INSERT INTO chat (idmessenger1, idmessenger2, nameMessenger1, nameMessenger2, imgMessenger1, imgMessenger2 ) VALUES (?,?,?,?,?,?)";
     connection.query(chat, params, function (err, result)
     {
         if (err)
