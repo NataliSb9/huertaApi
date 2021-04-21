@@ -196,9 +196,9 @@ function (request,response)
         " AND productEco = COALESCE(?, productEco)"+
         " AND productChange = COALESCE(?, productChange)"+
         " AND iduser = COALESCE(?, iduser)";
-        connection.query(productQuery,params, function (err, result) 
-        
-        {
+        console.log(productQuery)
+        console.log("parametros"+params)
+        connection.query(productQuery,params, function (err, result){
             if (err) response.send(err)
             else 
             {
@@ -229,9 +229,9 @@ app.post ("/product",
 function (request,response) 
 {
     let params = [request.body.productName, request.body.productType, request.body.productAmount, request.body.productLocality, request.body.productPrice, request.body.productEco, request.body.productChange, request.body.iduser, request.body.productImg, request.body.productDescription]
-    let product = "INSERT INTO product (productName, productType, productAmount, productLocality, productPrice, productEco, productChange, iduser, productImg) VALUES (?,?,?,?,?,?,?,?,?)";
-    connection.query(product, params, function (err, result)
-    {
+    let product = "INSERT INTO product (productName, productType, productAmount, productLocality, productPrice, productEco, productChange, iduser, productImg, productDescription) VALUES (?,?,?,?,?,?,?,?,?,?)";
+    console.log(params)
+    connection.query(product, params, function (err, result){
         if (err)
         {
             if((err.code == "ER_BAD_NULL_ERROR"))
@@ -326,11 +326,16 @@ app.get("/chat",
 
 function (request,response) 
 {
-    let params = [request.query.id];
-    console.log(request.query.id);
-    if(request.query.id != null)
+    let params = [request.query.id1 , request.query.id2];
+    
+    if(request.query.id1 != null || request.query.id2!=null)
     {
-        let chatInfo = "SELECT * FROM chat WHERE idchat = ?";
+        let chatInfo = `SELECT chat.idmessenger1, chat.idmessenger2, chat.idchat, user.name, user.userImg  FROM chat 
+
+        INNER JOIN user ON (user.iduser = chat.idmessenger2)
+        
+        WHERE idmessenger1 = ? OR idmessenger2 = ?;`
+
         connection.query(chatInfo, params, function (err, result) 
         {
             if (err) response.send(err)
@@ -353,7 +358,7 @@ function (request,response)
             {
                 response.send(result)
             }
-        }) 
+        })  
     }
 });
 /*///////////////POST CHAT/////////////////////*/ 
@@ -420,7 +425,7 @@ function (request,response)
 
     if(request.query.id != null)
     {
-        let messageInfo = "SELECT * FROM message WHERE idmessage = ?";
+        let messageInfo = "SELECT messageText FROM message WHERE idchat = ?";
         connection.query(messageInfo, params, function (err, result) 
         {
             if (err) response.send(err)
