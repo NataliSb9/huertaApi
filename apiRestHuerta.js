@@ -209,7 +209,7 @@ function (request,response)
 
     else if(request.query.productName == null && request.query.id == null && request.query.productType == null && request.query.productAmount == null && request.query.productLocality == null && request.query.productPrice == null && request.query.productEco == null && request.query.productChange == null)
     {
-        let productInfo = "SELECT * FROM product ORDER BY idproduct DESC LIMIT 9"
+        let productInfo = "SELECT * FROM product ORDER BY idproduct DESC LIMIT 12"
         connection.query(productInfo, function (err,result)
         {
             if (err)
