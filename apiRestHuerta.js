@@ -95,7 +95,7 @@ app.post ("/user",
 function (request,response) 
 {
     let params = [request.body.name, request.body.surname1, request.body.birthyear, request.body.username, request.body.localidad, request.body.telefono, request.body.email, request.body.password, request.body.userImg]
-    let usuario = "INSERT INTO user (name, surname1, birthyear, username, localidad, telefono, email, password) VALUES (?,?,?,?,?,?,?,?)";
+    let usuario = "INSERT INTO user (name, surname1, birthyear, username, localidad, telefono, email, password, userImg) VALUES (?,?,?,?,?,?,?,?,?)";
     connection.query(usuario, params, function (err, result)
     {
         if (err)
@@ -214,7 +214,7 @@ function (request,response)
 
     else if(request.query.productName == null && request.query.id == null && request.query.productType == null && request.query.productAmount == null && request.query.productLocality == null && request.query.productPrice == null && request.query.productEco == null && request.query.productChange == null)
     {
-        let productInfo = "SELECT * FROM product ORDER BY idproduct DESC LIMIT 9"
+        let productInfo = "SELECT * FROM product ORDER BY idproduct DESC LIMIT 12"
         connection.query(productInfo, function (err,result)
         {
             if (err)
@@ -335,11 +335,13 @@ function (request,response)
     
     if(request.query.id1 != null || request.query.id2!=null)
     {
-        let chatInfo = `SELECT chat.idmessenger1, chat.idmessenger2, chat.idchat, user.name, user.userImg  FROM chat 
+        // let chatInfo = `SELECT chat.idmessenger1, chat.idmessenger2, chat.idchat, user.name, user.userImg  FROM chat 
 
-        INNER JOIN user ON (user.iduser = chat.idmessenger2)
+        // INNER JOIN user ON (user.iduser = chat.idmessenger2)
         
-        WHERE idmessenger1 = ? OR idmessenger2 = ?;`
+        // WHERE idmessenger1 = ? OR idmessenger2 = ?;`
+
+        let chatInfo =  'SELECT * FROM chat WHERE idmessenger1=? OR idmessenger2=?'
 
         connection.query(chatInfo, params, function (err, result) 
         {
@@ -371,8 +373,8 @@ app.post ("/chat",
 
 function (request,response) 
 {
-    let params = [request.body.idmessenger1, request.body.idmessenger2]
-    let chat = "INSERT INTO chat (idmessenger1, idmessenger2) VALUES (?,?)";
+    let params = [request.body.idmessenger1, request.body.idmessenger2,request.body.nameMessenger1,request.body.nameMessenger2,request.body.imgMessenger1,request.body.imgMessenger2]
+    let chat = "INSERT INTO chat (idmessenger1, idmessenger2, nameMessenger1, nameMessenger2, imgMessenger1, imgMessenger2 ) VALUES (?,?,?,?,?,?)";
     connection.query(chat, params, function (err, result)
     {
         if (err)
